@@ -41,7 +41,6 @@ public class BaiduHome_page {
         wait.until(ExpectedConditions.elementToBeClickable(ElementBaiduInput));
         ElementBaiduInput.clear();
         ElementBaiduInput.sendKeys(searchText);
-        ElementSubmit.click();
     }
 
     // 输入查询内容，并点击查询按钮

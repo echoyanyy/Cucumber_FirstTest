@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
         features = {"src/test/resources/feature/"},
         format = {"pretty", "html:target/cucumber", "json:target/cucumber.json"},
         glue = {"com.cucumber"},
-        tags = {"@Login"}
+        tags = {"@BaiduSearch"}
 )
 public class RunCukesTest {
 }

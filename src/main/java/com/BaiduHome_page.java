@@ -1,36 +1,70 @@
 package com;
 
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.helpermethods.PageLoad;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 
-public class BaiduHome_page {
+import java.util.concurrent.TimeUnit;
+
+public class BaiduHome_page extends LoadableComponent<BaiduHome_page> {
 
     public WebDriver driver;
 
-    public BaiduHome_page(WebDriver driver){
+    public BaiduHome_page(WebDriver driver,String Url){
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        driver.get(Url);
+    }
+
+    @Override
+    protected void load() {
+    }
+
+    @Override
+    protected void isLoaded() throws Error {
+
+        System.out.println("=====判断BaiduHome_page是否加载完成=====");
+
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(30, TimeUnit.SECONDS)
+                .pollingEvery(500, TimeUnit.MILLISECONDS)
+                .ignoring(NoSuchElementException.class);
+
+        wait.until((new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driverObject) {
+                System.out.println("Waiting BaiduHome_page Dom loading complete\n ");
+                return (Boolean) ((JavascriptExecutor) driverObject).executeScript("return document.readyState === 'complete'");
+            }
+        }));
+
+        if(!PageLoad.myElementIsClickable(this.driver, By.id("kw"))) {
+            throw new Error("BaiduHome_page was not successfully loaded");
+        }
+        System.out.println("*****BaiduHome_page is loading complete*****");
     }
 
     //百度logo
     @FindBy(xpath="//div[@id='lg']/img")
-    public WebElement ElementBaiduLogo;
+    private WebElement ElementBaiduLogo;
 
     //输入框
     @FindBy(id="kw")
-    public WebElement ElementBaiduInput;
+    private WebElement ElementBaiduInput;
 
     //按钮 查询一下
     @FindBy(id="su")
-    public WebElement ElementSubmit;
+    private WebElement ElementSubmit;
 
 
-    //获取当前页面面包屑信息 预约订单
+    public WebElement getBaiduLogo(){
+        return ElementBaiduLogo;
+    }
+
+    //获取当前页面title
     public String getPageTitle(){
         return driver.getTitle();
     }
